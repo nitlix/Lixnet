@@ -9,7 +9,7 @@ function createLixnetId() {
 type Caller<ThisToThereEvents extends Record<string, any>> = <
     K extends keyof ThisToThereEvents
 >(
-    name: K,
+    event: K,
     input: PeerEventInput<ThisToThereEvents[K]>,
     options?: {
         callback:
@@ -97,6 +97,10 @@ export default class LixnetPeer<
             const chunks: Record<number, string> = {};
 
             for (let i = 0; i < limits.length; i++) {
+                if (i === limits.length - 1) {
+                    chunks[i] = `${tId}.${i}.${dataString}`;
+                    break;
+                }
                 chunks[i] = `${tId}.${i}.${dataString.slice(0, limits[i])}`;
                 dataString = dataString.slice(limits[i]);
             }

@@ -11,7 +11,7 @@ type LXNServerEventInput<
     Events extends LXN_ServerClient_EventType,
     TName extends keyof Events
 > = {
-    name: TName;
+    event: TName;
     handler: LXNServerHandler<
         FunctionInput<Events[TName]> & { request: Request }
     >;
@@ -44,10 +44,10 @@ export default class LixnetServer<Events extends LXN_ServerClient_EventType> {
     ) {
         if (Array.isArray(input)) {
             input.forEach((event) => {
-                this.events[event.name] = event;
+                this.events[event.event] = event;
             });
         } else {
-            this.events[input.name] = input;
+            this.events[input.event] = input;
         }
     }
 
