@@ -53,6 +53,8 @@ export default class LixnetServer<Events extends LXN_ServerClient_EventType> {
     }
 
     public async handle(request: Request) {
+        const requestClone = request.clone();
+
         let jsonData;
         try {
             jsonData = (await request.json()) as any;
@@ -102,12 +104,11 @@ export default class LixnetServer<Events extends LXN_ServerClient_EventType> {
 
             try {
                 let additionalInit: ResponseInit = {};
-                const newRequest: LXN_ServerClient_Request = {
-                    ...request,
-                    setAdditionalInit: (init) => {
-                        additionalInit = init;
-                    },
+                const clonedReq: any = new Request(requestClone as any);
+                clonedReq.setAdditionalInit = (init: ResponseInit) => {
+                    additionalInit = init;
                 };
+                const newRequest: LXN_ServerClient_Request = clonedReq;
 
                 const result = await event.handler({
                     request: newRequest,
@@ -118,7 +119,7 @@ export default class LixnetServer<Events extends LXN_ServerClient_EventType> {
                 }
                 return this.jsonResponseMaker(
                     {
-                        data: result.headers,
+                        data: result,
                     },
                     additionalInit
                 );
