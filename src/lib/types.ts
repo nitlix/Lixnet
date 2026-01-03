@@ -10,7 +10,13 @@ export type FunctionInput<T> = T extends (input: infer TInput) => any
     ? TInput
     : { _TYPE_ERROR_: "Event definition must be a function type" };
 
-export type LXNServerHandler<Input> = (input: Input) => Promise<any> | any;
+export type FunctionOutput<T> = T extends (...args: any) => infer R
+    ? Awaited<R>
+    : { _TYPE_ERROR_: "Event definition must be a function type" };
+
+export type LXNServerHandler<Input, Output> = (
+    input: Input
+) => Promise<Output> | Output;
 
 export type LXN_ServerClient_EventType = object;
 

@@ -3,6 +3,7 @@ import LixnetLog from "./util/log";
 import type {
     DebugLogger,
     FunctionInput,
+    FunctionOutput,
     LXNServerHandler,
     LXN_ServerClient_EventType,
     LXN_ServerClient_Request,
@@ -14,7 +15,8 @@ type LXNServerEventInput<
 > = {
     event: TName;
     handler: LXNServerHandler<
-        FunctionInput<Events[TName]> & { request: LXN_ServerClient_Request }
+        FunctionInput<Events[TName]> & { request: LXN_ServerClient_Request },
+        FunctionOutput<Events[TName]>
     >;
     schema?: z.ZodSchema<any>;
 };
