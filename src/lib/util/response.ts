@@ -18,31 +18,9 @@ export default class LixnetResponse {
         options?: CookieOptions;
     }> = {};
 
-    public constructor({ formatter }: { formatter?: (this: LixnetResponse) => Response }) {
+    public constructor({ formatter }: { formatter: (this: LixnetResponse) => Response }) {
         this.responseData = null;
-        this.format = formatter ?? (() => {
-            const headers = new Headers();
-            for (const [headerName, headerValue] of Object.entries(this.responseHeaders)) {
-                headers.set(headerName, headerValue);
-            }
-            for (const [cookieName, cookie] of Object.entries(this.responseCookies)) {
-                if (cookie.type === "value") {
-                    const opts = cookie.options ?? {};
-                    headers.set('Set-Cookie', `${cookieName}=${cookie.value}; ${Object.entries(opts).map(([key, value]) => `${key}=${value}`).join('; ')}`);
-                }
-                else if (cookie.type === "delete") {
-                    headers.set('Set-Cookie', `${cookieName}=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Strict`);
-                }
-                else {
-                    throw new Error(`Unknown cookie type: ${cookie.type}`);
-                }
-            }
-
-            return Response.json(this.responseError ? { error: this.responseError } : { data: this.responseData }, {
-                status: this.responseCode ? this.responseCode : this.responseError ? 400 : 200,
-                headers: headers
-            });
-        })
+        this.format = formatter;
     }
 
     public data(data: any): void {

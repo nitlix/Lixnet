@@ -10,6 +10,7 @@ import type {
 } from "./types";
 import LixnetResponse from "./util/response";
 import defaultFormatter from "./util/formatter";
+import LixnetRequest from "./util/request";
 
 type LXNServerEventInput<
     Events extends LXN_ServerClient_EventType,
@@ -107,7 +108,9 @@ export default class LixnetServer<Events extends LXN_ServerClient_EventType> {
                 : jsonData.input;
 
             try {
-                const newRequest: LXN_ServerClient_Request = requestClone;
+                const newRequest: LXN_ServerClient_Request =
+                    LixnetRequest(requestClone);
+
 
                 const data = await event.handler({
                     ...validatedInput,
