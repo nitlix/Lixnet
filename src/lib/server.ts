@@ -8,7 +8,7 @@ import type {
     LXN_ServerClient_EventType,
     LXN_ServerClient_Request,
 } from "./types";
-import LixnetResponse from "./util/response";
+import { LixnetResponse } from "./util/response";
 import defaultFormatter from "./util/formatter";
 import LixnetRequest from "./util/request";
 

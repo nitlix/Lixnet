@@ -7,7 +7,7 @@ type CookieOptions = {
     sameSite?: 'lax' | 'strict' | 'none';
 };
 
-export default class LixnetResponse {
+export class LixnetResponse {
     public responseData: any;
     public responseError: string | null = null;
     public responseCode: number = 200;

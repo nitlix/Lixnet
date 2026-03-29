@@ -1,4 +1,4 @@
-import LixnetResponse from "./response";
+import { LixnetResponse } from "./response";
 
 export default function jsonFormatter(this: LixnetResponse) {
     const headers = new Headers({

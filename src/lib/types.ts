@@ -1,3 +1,6 @@
+import { LixnetRequest } from "./util/request";
+import { LixnetResponse } from "./util/response";
+
 export type DebugLogger = ({
     error,
     message,
@@ -22,3 +25,8 @@ export type LXN_ServerClient_EventType = object;
 
 /** The inbound request passed to handlers (Next.js–style `cookies()` / `headers()`). */
 export type { LixnetRequest as LXN_ServerClient_Request } from "./util/request";
+
+export type LixnetServer_HandlerInjections = {
+    request: LixnetRequest;
+    response: LixnetResponse;
+}
