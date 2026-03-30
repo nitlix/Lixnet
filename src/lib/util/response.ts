@@ -18,7 +18,7 @@ export type CookieDeleteOptions = {
 export class LixnetResponse {
     public responseData: any;
     public responseError: string | null = null;
-    public responseCode: number = 200;
+    public responseCode: number = 0;
     public responseHeaders: Record<string, string> = {};
     public responseHeaderDeletes: Set<string> = new Set();
     public responseCookies: Record<string, {

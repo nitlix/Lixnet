@@ -49,7 +49,7 @@ export default function (defaultHeaders: Record<string, string>) {
             return Response.json({
                 error: this.responseError,
             }, {
-                status: this.responseCode ?? 500,
+                status: this.responseCode || 500,
                 headers: headers,
             });
         }
@@ -57,7 +57,7 @@ export default function (defaultHeaders: Record<string, string>) {
         return Response.json({
             data: this.responseData,
         }, {
-            status: this.responseCode ?? 200,
+            status: this.responseCode || 200,
             headers: headers,
         });
 
