@@ -31,9 +31,9 @@ function parseCookieHeader(header: string | null): Map<string, string> {
 }
 
 /**
- * Read-only view of request cookies (Next.js `ReadonlyRequestCookies`).
+ * Cookie API exposed by `LixnetRequest`: read from the request snapshot, write via `LixnetResponse`.
  */
-export class ReadonlyRequestCookies {
+export class LixnetCookies {
     private readonly map: Map<string, string>;
     private readonly mut?: {
         setCookie: (name: string, value: string, options?: unknown) => void;
@@ -140,10 +140,9 @@ export class ReadonlyRequestCookies {
 }
 
 /**
- * Read-only `Headers` view (Next.js `ReadonlyHeaders`).
- * Wraps a cloned `Headers` instance so callers cannot mutate the snapshot.
+ * Headers API exposed by `LixnetRequest`: read from the request snapshot, write via `LixnetResponse`.
  */
-export class ReadonlyHeaders {
+export class LixnetHeaders {
     private readonly h: Headers;
     private readonly mut?: {
         setHeader: (name: string, value: string) => void;
@@ -219,12 +218,17 @@ export class ReadonlyHeaders {
         callbackfn: (
             value: string,
             name: string,
-            parent: ReadonlyHeaders
+            parent: LixnetHeaders
         ) => void,
         thisArg?: unknown
     ): void {
         const self = this;
-        this.h.forEach(function (value, name) {
+        const merged = new Headers(this.h);
+        const staged = this.mut?.getStaged?.();
+        if (staged) {
+            for (const [k, v] of Object.entries(staged)) merged.set(k, v);
+        }
+        merged.forEach(function (value, name) {
             callbackfn.call(thisArg ?? self, value, name, self);
         });
     }
@@ -251,8 +255,8 @@ export class ReadonlyHeaders {
 
 
 export type LixnetRequest = Omit<Request, "headers"> & {
-    cookies(): ReadonlyRequestCookies;
-    headers(): ReadonlyHeaders;
+    cookies(): LixnetCookies;
+    headers(): LixnetHeaders;
 };
 
 /** Used by the server only; not part of the public package API. */
@@ -304,7 +308,7 @@ export function wrapLixnetRequest(
         get(target, prop, receiver) {
             if (prop === "cookies") {
                 return function cookies() {
-                    return new ReadonlyRequestCookies(
+                    return new LixnetCookies(
                         snapshot.get("cookie"),
                         cookieMut
                     );
@@ -312,10 +316,16 @@ export function wrapLixnetRequest(
             }
             if (prop === "headers") {
                 return function headers() {
-                    return new ReadonlyHeaders(snapshot, headerMut);
+                    return new LixnetHeaders(snapshot, headerMut);
                 };
             }
             return Reflect.get(target, prop, receiver);
         },
     }) as unknown as LixnetRequest;
 }
+
+/** @deprecated Use {@link LixnetCookies}. */
+export type ReadonlyRequestCookies = LixnetCookies;
+
+/** @deprecated Use {@link LixnetHeaders}. */
+export type ReadonlyHeaders = LixnetHeaders;

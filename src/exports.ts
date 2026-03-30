@@ -5,6 +5,8 @@ import { LixnetResponse } from "./lib/util/response";
 
 export { LixnetServer, LixnetClient, LixnetPeer, LixnetResponse };
 export type {
+    LixnetCookies,
+    LixnetHeaders,
     LixnetRequest,
     ReadonlyHeaders,
     ReadonlyRequestCookies,
