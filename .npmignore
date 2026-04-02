@@ -4,3 +4,4 @@ tsconfig.json
 bun.lock
 .cursor/
 tests/
+.github/

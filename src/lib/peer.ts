@@ -3,7 +3,7 @@ export type PeerEventInput<T> = T extends (input: infer TInput) => any
     : never;
 
 function createLixnetId() {
-    return "LX-" + Math.random().toString(36).substring(2, 15);
+    return "LXN-" + Math.random().toString(36).substring(2, 15);
 }
 
 type Caller<ThisToThereEvents extends Record<string, any>> = <
