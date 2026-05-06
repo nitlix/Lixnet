@@ -2,8 +2,8 @@ name: Publish package to NPM
 
 on:
     push:
-        tags:
-            - "v*"
+        branches:
+            - "**"
 
 jobs:
     publish:

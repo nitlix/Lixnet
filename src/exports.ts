@@ -20,4 +20,12 @@ export type {
     FunctionInput,
     LXN_ServerClient_Request,
     LixnetServerInjections,
+    ExtractEventFunc,
+    IsStreamEvent,
+    EventInput,
+    EventOutput,
+    StreamChunkType,
+    StreamEventKeys,
+    RegularEventKeys,
+    LXNStreamEmitter,
 } from "./lib/types";
