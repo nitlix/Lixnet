@@ -3,9 +3,11 @@
 import LixnetServer from "./lib/server";
 import LixnetClient from "./lib/client";
 import LixnetPeer from "./lib/peer";
+import LixnetStreamServer from "./lib/streamserver";
+import LixnetStreamClient from "./lib/streamclient";
 import { LixnetResponse } from "./lib/util/response";
 
-export { LixnetServer, LixnetClient, LixnetPeer, LixnetResponse };
+export { LixnetServer, LixnetClient, LixnetPeer, LixnetStreamServer, LixnetStreamClient, LixnetResponse };
 export type {
     LixnetCookies,
     LixnetHeaders,
@@ -20,12 +22,6 @@ export type {
     FunctionInput,
     LXN_ServerClient_Request,
     LixnetServerInjections,
-    ExtractEventFunc,
-    IsStreamEvent,
-    EventInput,
-    EventOutput,
-    StreamChunkType,
-    StreamEventKeys,
-    RegularEventKeys,
     LXNStreamEmitter,
 } from "./lib/types";
+export type { LXNStreamCallOptions } from "./lib/streamclient";

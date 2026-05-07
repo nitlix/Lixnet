@@ -1,43 +1,24 @@
-import { LixnetClient, LixnetRequest, LixnetResponse, LixnetServer, LXNStreamEmitter } from "../src/exports";
+import { LixnetStreamClient, LixnetStreamServer } from "../src/exports";
 
-type ProfileChunk = { message: string };
-
-const handler = async ({
-    search,
-    request,
-    response,
-    stream,
-}: {
-    search: string;
-    request: LixnetRequest;
-    response: LixnetResponse;
-    stream: LXNStreamEmitter<ProfileChunk>;
-}) => {
-    stream.emit({ message: `Hello, ${search}!` });
-};
-
-export interface LXNRPC_Events {
-    cache_getProfile: {
-        type: "stream";
-        func: ({
-            search,
-        }: {
-            search: string;
-        }) => ProfileChunk;
-    };
+interface LXNRPC_StreamEvents {
+    cache_getProfile: ({ search }: { search: string }) => { message: string };
 }
 
-const server = new LixnetServer<LXNRPC_Events>({});
+const server = new LixnetStreamServer<LXNRPC_StreamEvents>({});
 
-server.onStream({
+server.on({
     event: "cache_getProfile",
-    handler: handler,
+    handler: async ({ search, stream }) => {
+        stream.emit({ message: `Hello, ${search}!` });
+    },
 });
 
-const client = new LixnetClient<LXNRPC_Events>({
+const client = new LixnetStreamClient<LXNRPC_StreamEvents>({
     rpcUrl: "http://localhost:3000",
 });
 
 client.call("cache_getProfile", { search: "John Doe" }, {
-
+    onStreamChunk: (chunk) => {
+        console.log(chunk.message);
+    },
 });
